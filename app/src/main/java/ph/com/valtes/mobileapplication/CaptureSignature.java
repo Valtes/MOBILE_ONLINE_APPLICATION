@@ -4,10 +4,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Calendar;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -46,6 +48,8 @@ public class CaptureSignature extends Activity {
 
     private String uniqueId;
     private EditText yourName;
+
+    private int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -123,7 +127,7 @@ public class CaptureSignature extends Activity {
 
     @Override
     protected void onDestroy() {
-        Log.w("GetSignature", "onDestory");
+        Log.w("GetSignature", "onDestroy");
         super.onDestroy();
     }
 
@@ -246,6 +250,16 @@ public class CaptureSignature extends Activity {
                 mBitmap.compress(Bitmap.CompressFormat.PNG, 90, mFileOutStream);
                 mFileOutStream.flush();
                 mFileOutStream.close();
+
+                if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+
+                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                            MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+
+                    return;
+                }
+
                 String url = Images.Media.insertImage(getContentResolver(), mBitmap, "title", null);
                 Log.v("log_tag","url: " + url);
                 //In case you want to delete the file

@@ -3,6 +3,8 @@ package ph.com.valtes.mobileapplication;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import ph.com.valtes.R;
+
 public class Login extends AppCompatActivity {
 
     @Override

@@ -1,6 +1,9 @@
 package ph.com.valtes.mobileapplication;
 
+import android.Manifest;
 import android.content.Intent;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -13,7 +16,9 @@ import ph.com.valtes.mobileapplication.R;
 public class Login extends AppCompatActivity {
 
     public static final int SIGNATURE_ACTIVITY = 1;
+    public static final int MY_PERMISSIONS_REQUEST_RECEIVE_SMS = 1;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +31,9 @@ public class Login extends AppCompatActivity {
                 startActivityForResult(intent,SIGNATURE_ACTIVITY);
             }
         });
+
+        requestPermissions(new String[]{Manifest.permission.RECEIVE_SMS},
+                MY_PERMISSIONS_REQUEST_RECEIVE_SMS);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data)

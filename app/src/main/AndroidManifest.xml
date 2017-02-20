@@ -3,6 +3,10 @@
     package="ph.com.valtes.mobileapplication">
     <uses-sdk android:minSdkVersion="13" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="25"/>
+    <uses-permission android:name="android.permission.RECEIVE_SMS" android:maxSdkVersion="25"></uses-permission>
+    <uses-permission android:name="android.permission.READ_SMS" android:maxSdkVersion="25"></uses-permission>
+    <uses-permission android:name="android.permission.SEND_SMS" android:maxSdkVersion="25"></uses-permission>
+    <uses-permission android:name="android.permission.INTERNET" android:maxSdkVersion="25"></uses-permission>
 
     <application
     android:allowBackup="true"
@@ -20,6 +24,12 @@
 
         <activity android:name="ph.com.valtes.mobileapplication.CaptureSignature" android:label="Signature Confirmation"
         android:theme="@android:style/Theme.Holo.Light.Dialog" />
+
+        <receiver android:name=".IncomingSms">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
     </application>
 
     </manifest>

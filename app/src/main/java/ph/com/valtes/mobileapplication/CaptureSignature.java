@@ -2,14 +2,9 @@ package ph.com.valtes.mobileapplication;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.Calendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import android.Manifest;
 import android.app.Activity;
@@ -25,7 +20,6 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
 import android.util.AttributeSet;
 import android.util.Base64;
@@ -40,10 +34,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
-import ph.com.valtes.mobileapplication.R;
-
-import static android.R.attr.bitmap;
 
 public class CaptureSignature extends Activity {
 
@@ -177,7 +167,7 @@ public class CaptureSignature extends Activity {
     private String getCurrentTime() {
 
         final Calendar c = Calendar.getInstance();
-        int currentTime =     (c.get(Calendar.HOUR_OF_DAY) * 10000) +
+        int currentTime = (c.get(Calendar.HOUR_OF_DAY) * 10000) +
                 (c.get(Calendar.MINUTE) * 100) +
                 (c.get(Calendar.SECOND));
         Log.w("TIME:",String.valueOf(currentTime));

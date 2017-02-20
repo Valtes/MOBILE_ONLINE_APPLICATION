@@ -1,8 +1,15 @@
 package ph.com.valtes.mobileapplication;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import android.Manifest;
 import android.app.Activity;
@@ -18,8 +25,10 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
 import android.util.AttributeSet;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -32,7 +41,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import ph.com.valtes.R;
+import ph.com.valtes.mobileapplication.R;
+
+import static android.R.attr.bitmap;
 
 public class CaptureSignature extends Activity {
 
@@ -48,6 +59,7 @@ public class CaptureSignature extends Activity {
 
     private String uniqueId;
     private EditText yourName;
+    private String encodedSignature;
 
     private int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
 
@@ -64,14 +76,14 @@ public class CaptureSignature extends Activity {
 
         prepareDirectory();
         uniqueId = getTodaysDate() + "_" + getCurrentTime() + "_" + Math.random();
-        current = uniqueId + ".png";
+        current = uniqueId + ".jpg";
         mypath= new File(directory,current);
 
 
         mContent = (LinearLayout) findViewById(R.id.linearLayout);
         mSignature = new signature(this, null);
         mSignature.setBackgroundColor(Color.WHITE);
-        mContent.addView(mSignature, LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+        mContent.addView(mSignature, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         mClear = (Button)findViewById(R.id.clear);
         mGetSign = (Button)findViewById(R.id.getsign);
         mGetSign.setEnabled(false);
@@ -260,18 +272,22 @@ public class CaptureSignature extends Activity {
                     return;
                 }
 
-                String url = Images.Media.insertImage(getContentResolver(), mBitmap, "title", null);
-                Log.v("log_tag","url: " + url);
+                String signatureUrl = Images.Media.insertImage(getContentResolver(), mBitmap, current, null);
+                Log.v("log_tag","url: " + signatureUrl);
                 //In case you want to delete the file
                 //boolean deleted = mypath.delete();
                 //Log.v("log_tag","deleted: " + mypath.toString() + deleted);
                 //If you want to convert the image to string use base64 converter
+                encodedSignature = getEncodeData();
+                Log.v("log_tag", "encodedSignature: " + encodedSignature);
 
             }
             catch(Exception e)
             {
                 Log.v("log_tag", e.toString());
             }
+
+            return;
         }
 
         public void clear()
@@ -364,5 +380,15 @@ public class CaptureSignature extends Activity {
             dirtyRect.top = Math.min(lastTouchY, eventY);
             dirtyRect.bottom = Math.max(lastTouchY, eventY);
         }
+    }
+
+    private String getEncodeData() throws IOException {
+        String encodedimage1 = null;
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        mBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        encodedimage1 = Base64.encodeToString(byteArray, Base64.DEFAULT);
+        return encodedimage1;
     }
 }

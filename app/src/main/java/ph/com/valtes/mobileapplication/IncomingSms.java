@@ -13,14 +13,14 @@ import android.widget.Toast;
  * Created by VATPC-035 on 2/20/2017.
  */
 
-public class IncomingSms extends BroadcastReceiver{
+public class IncomingSms extends BroadcastReceiver {
 
     // Get the object of SmsManager
     final SmsManager sms = SmsManager.getDefault();
 
     public void onReceive(Context context, Intent intent) {
-        System.out.println("I forgot the marshmallows.");
-        Log.w("log_tag", "I forgot the marshmallows.");
+
+        RegistrationActivity registrationActivity = new RegistrationActivity();
 
         // Retrieves a map of extended data from the intent.
         final Bundle bundle = intent.getExtras();
@@ -44,6 +44,8 @@ public class IncomingSms extends BroadcastReceiver{
                     int duration = Toast.LENGTH_LONG;
                     Toast toast = Toast.makeText(context, "senderNum: " + senderNum + ", message: " + message, duration);
                     toast.show();
+
+                    registrationActivity.setMessageBody(message);
 
                 } // end for loop
             } // bundle is null

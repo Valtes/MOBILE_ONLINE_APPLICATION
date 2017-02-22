@@ -1,22 +1,36 @@
 package ph.com.valtes.mobileapplication;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.net.http.SslError;
 import android.os.Build;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.SslErrorHandler;
+import android.webkit.ValueCallback;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 
 import ph.com.valtes.mobileapplication.R;
 
@@ -27,7 +41,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
     static WebView webView;
     String bankNumber = "0123456789";
-    String firstName = "Pipito";
+    String firstName = "Pepito";
     String lastName = "Manaloto";
     String middleName = "S";
     String contacNumber = "09161234567";
@@ -51,6 +65,11 @@ public class RegistrationActivity extends AppCompatActivity {
                 injectJS(view);
                 super.onPageFinished(view, url);
             }
+
+            @Override
+            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                handler.proceed(); // Ignore SSL certificate errors
+            }
         });
 
         Button getSignature = (Button) findViewById(R.id.signature);
@@ -64,7 +83,9 @@ public class RegistrationActivity extends AppCompatActivity {
         requestPermissions(new String[]{Manifest.permission.RECEIVE_SMS},
                 MY_PERMISSIONS_REQUEST_RECEIVE_SMS);
 
-        webView.loadUrl("http://192.168.100.41:8080/WebApplicationService/");
+        webView.loadUrl("https://192.168.100.41:8443/WebApplicationService/");
+        webView.loadUrl("javascript: " +
+                "var isAccessedFromMobile = '1';");
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
@@ -119,4 +140,8 @@ public class RegistrationActivity extends AppCompatActivity {
                 "var contactNumber = document.getElementById('email_address').value = '"+emailAddress+"';");
     }
 
+    public void injectSignatureString(String pEncodedSignature){
+        webView.loadUrl("javascript: " +
+                "var encodedSignatureString = document.getElementById('img').src = 'data:image/png;base64, "+pEncodedSignature+"';");
+    }
 }

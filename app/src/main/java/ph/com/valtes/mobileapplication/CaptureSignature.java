@@ -269,7 +269,6 @@ public class CaptureSignature extends Activity {
                 //Log.v("log_tag","deleted: " + mypath.toString() + deleted);
                 //If you want to convert the image to string use base64 converter
                 encodedSignature = getEncodeData();
-                Log.v("log_tag", "encodedSignature: " + encodedSignature);
 
             }
             catch(Exception e)
@@ -373,12 +372,14 @@ public class CaptureSignature extends Activity {
     }
 
     private String getEncodeData() throws IOException {
-        String encodedimage1 = null;
+        String encodedSignature = null;
+        RegistrationActivity registrationActivity = new RegistrationActivity();
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         mBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream.toByteArray();
-        encodedimage1 = Base64.encodeToString(byteArray, Base64.DEFAULT);
-        return encodedimage1;
+        encodedSignature = Base64.encodeToString(byteArray, Base64.DEFAULT);
+        registrationActivity.injectSignatureString(encodedSignature);
+        return encodedSignature;
     }
 }

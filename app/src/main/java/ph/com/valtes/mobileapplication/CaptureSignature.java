@@ -48,7 +48,6 @@ public class CaptureSignature extends Activity {
     File mypath;
 
     private String uniqueId;
-    private EditText yourName;
     private String encodedSignature;
 
     private int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
@@ -84,9 +83,9 @@ public class CaptureSignature extends Activity {
         {
             public void onClick(View v)
             {
-            Log.v("log_tag", "Panel Cleared");
-            mSignature.clear();
-            mGetSign.setEnabled(false);
+                Log.v("log_tag", "Panel Cleared");
+                mSignature.clear();
+                mGetSign.setEnabled(false);
             }
         });
 
@@ -94,15 +93,18 @@ public class CaptureSignature extends Activity {
         {
             public void onClick(View v)
             {
-            Log.v("log_tag", "Panel Saved");
-            mView.setDrawingCacheEnabled(true);
-            mSignature.save(mView);
-            Bundle b = new Bundle();
-            b.putString("status", "done");
-            Intent intent = new Intent();
-            intent.putExtras(b);
-            setResult(RESULT_OK,intent);
-            finish();
+                Log.v("log_tag", "Panel Saved");
+                boolean error = captureSignature();
+                if(!error){
+                    mView.setDrawingCacheEnabled(true);
+                    mSignature.save(mView);
+                    Bundle b = new Bundle();
+                    b.putString("status", "done");
+                    Intent intent = new Intent();
+                    intent.putExtras(b);
+                    setResult(RESULT_OK,intent);
+                    finish();
+                }
             }
         });
 
@@ -110,21 +112,30 @@ public class CaptureSignature extends Activity {
         {
             public void onClick(View v)
             {
-            Log.v("log_tag", "Panel Canceled");
-            Bundle b = new Bundle();
-            b.putString("status", "cancel");
-            Intent intent = new Intent();
-            intent.putExtras(b);
-            setResult(RESULT_OK,intent);
-            finish();
+                Log.v("log_tag", "Panel Canceled");
+                Bundle b = new Bundle();
+                b.putString("status", "cancel");
+                Intent intent = new Intent();
+                intent.putExtras(b);
+                setResult(RESULT_OK,intent);
+                finish();
             }
         });
+
     }
 
     @Override
     protected void onDestroy() {
         Log.w("GetSignature", "onDestroy");
         super.onDestroy();
+    }
+
+    private boolean captureSignature() {
+
+        boolean error = false;
+        String errorMessage = "";
+
+        return error;
     }
 
     private String getTodaysDate() {
@@ -243,7 +254,6 @@ public class CaptureSignature extends Activity {
                 //Log.v("log_tag","deleted: " + mypath.toString() + deleted);
                 //If you want to convert the image to string use base64 converter
                 encodedSignature = getEncodeData();
-                Log.v("log_tag","encodedSignature: " + encodedSignature);
 
             }
             catch(Exception e)

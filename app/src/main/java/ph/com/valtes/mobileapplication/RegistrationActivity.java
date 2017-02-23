@@ -1,37 +1,21 @@
 package ph.com.valtes.mobileapplication;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.GeolocationPermissions;
 import android.webkit.SslErrorHandler;
-import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.Toast;
-
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
+import android.webkit.GeolocationPermissions.Callback;
 
 import ph.com.valtes.mobileapplication.R;
 
@@ -59,6 +43,9 @@ public class RegistrationActivity extends AppCompatActivity {
 
         webView.getSettings().setDomStorageEnabled(true);
         webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setGeolocationEnabled(true);
+        webView.getSettings().setAppCacheEnabled(true);
+        webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         webView.setWebViewClient(new WebViewClient(){
             @Override
             public void onPageFinished(WebView view, String url) {
@@ -73,11 +60,13 @@ public class RegistrationActivity extends AppCompatActivity {
         });
 
         webView.setWebChromeClient(new WebChromeClient() {
-            public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
+
+            @Override
+            public void onGeolocationPermissionsShowPrompt(String origin, Callback callback) {
+                System.out.println("inside geolocation permission");
                 callback.invoke(origin, true, false);
             }
         });
-
 
         Button getSignature = (Button) findViewById(R.id.signature);
         getSignature.setOnClickListener(new View.OnClickListener() {

@@ -8,6 +8,8 @@
     <uses-permission android:name="android.permission.SEND_SMS" android:maxSdkVersion="25"></uses-permission>
     <uses-permission android:name="android.permission.INTERNET" android:maxSdkVersion="25"></uses-permission>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" android:maxSdkVersion="25"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" android:maxSdkVersion="25"></uses-permission>
+
 
     <application
     android:allowBackup="true"
@@ -15,7 +17,8 @@
     android:label="@string/app_name"
     android:supportsRtl="true"
     android:theme="@style/AppTheme">
-    <activity android:name="ph.com.valtes.mobileapplication.RegistrationActivity">
+    <activity android:name="ph.com.valtes.mobileapplication.RegistrationActivity"
+        android:windowSoftInputMode="adjustNothing">
     <intent-filter>
     <action android:name="android.intent.action.MAIN" />
 

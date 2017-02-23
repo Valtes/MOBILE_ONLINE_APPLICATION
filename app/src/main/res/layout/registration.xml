@@ -4,17 +4,27 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerHorizontal="true">-->
+        <!--<Button android:text="Get My Signature" android:id="@+id/signature"-->
+            <!--android:layout_width="wrap_content" android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentBottom="true"/>-->
+    <!--</RelativeLayout>-->
+
     <WebView
         android:id="@+id/webDisplay"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-    android:layout_weight="98">
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <Button android:text="Get My Signature" android:id="@+id/signature"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:layout_weight="2" android:layout_alignParentBottom="true"/>
-</RelativeLayout>
+        android:layout_height="wrap_content">
     </WebView>
+
+    <LinearLayout android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+        <Button android:layout_alignParentTop="true"
+            android:id="@+id/signature" android:layout_height="wrap_content"
+            android:layout_width="wrap_content" android:text="Get Signature"
+            android:layout_alignParentLeft="true"></Button>
+    </LinearLayout>
 </RelativeLayout>

@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.GeolocationPermissions;
 import android.webkit.SslErrorHandler;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
@@ -43,13 +44,12 @@ public class RegistrationActivity extends AppCompatActivity {
     String bankNumber = "0123456789";
     String firstName = "Pepito";
     String lastName = "Manaloto";
-    String middleName = "S";
+    String middleName = "Middle";
     String contacNumber = "09161234567";
     String emailAddress = "sample@valtes.com.ph";
 
     String messageBody = "";
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +72,13 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         });
 
+        webView.setWebChromeClient(new WebChromeClient() {
+            public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
+                callback.invoke(origin, true, false);
+            }
+        });
+
+
         Button getSignature = (Button) findViewById(R.id.signature);
         getSignature.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -79,9 +86,10 @@ public class RegistrationActivity extends AppCompatActivity {
                 startActivityForResult(intent,SIGNATURE_ACTIVITY);
             }
         });
-
-        requestPermissions(new String[]{Manifest.permission.RECEIVE_SMS},
-                MY_PERMISSIONS_REQUEST_RECEIVE_SMS);
+        if (Build.VERSION.SDK_INT > 22) {
+            requestPermissions(new String[]{Manifest.permission.RECEIVE_SMS},
+                    MY_PERMISSIONS_REQUEST_RECEIVE_SMS);
+        }
 
         webView.loadUrl("https://192.168.100.41:8443/WebApplicationService/");
         webView.loadUrl("javascript: " +
@@ -142,6 +150,8 @@ public class RegistrationActivity extends AppCompatActivity {
 
     public void injectSignatureString(String pEncodedSignature){
         webView.loadUrl("javascript: " +
-                "var encodedSignatureString = document.getElementById('img').src = 'data:image/png;base64, "+pEncodedSignature+"';");
+                "simpleFunction('thisisateststring');");
+        webView.loadUrl("javascript: " +
+                "b64toBlob('"+pEncodedSignature+"');");
     }
 }

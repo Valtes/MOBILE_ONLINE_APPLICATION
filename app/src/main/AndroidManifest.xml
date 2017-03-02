@@ -20,8 +20,7 @@
     android:label="@string/app_name"
     android:supportsRtl="true"
     android:theme="@style/AppTheme">
-    <activity android:name="ph.com.valtes.mobileapplication.RegistrationActivity"
-        android:windowSoftInputMode="adjustNothing">
+    <activity android:name="ph.com.valtes.mobileapplication.RegistrationActivity">
     <intent-filter>
     <action android:name="android.intent.action.MAIN" />
 
@@ -40,23 +39,3 @@
     </application>
 
     </manifest>
-    <!--<?xml version="1.0" encoding="utf-8"?>-->
-    <!--<manifest xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--package="ph.com.valtes" android:versionCode="1"-->
-    <!--android:versionName="1.0">-->
-    <!--<uses-sdk android:minSdkVersion="13" />-->
-    <!--<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="25"/>-->
-
-    <!--<application android:icon="@drawable/ic_action_name" android:label="@string/app_name"-->
-    <!--android:theme="@android:style/Theme.Holo.Light">-->
-    <!--<activity android:name="ph.com.valtes.mobileapplication.CaptureSignatureActivity"-->
-    <!--android:label="@string/app_name">-->
-    <!--<intent-filter>-->
-    <!--<action android:name="android.intent.action.MAIN" />-->
-    <!--<category android:name="android.intent.category.LAUNCHER" />-->
-    <!--</intent-filter>-->
-    <!--</activity>-->
-    <!--<activity android:name="ph.com.valtes.mobileapplication.CaptureSignature" android:label="Signature Confirmation"-->
-    <!--android:theme="@android:style/Theme.Holo.Light.Dialog" />-->
-    <!--</application>-->
-    <!--</manifest>-->

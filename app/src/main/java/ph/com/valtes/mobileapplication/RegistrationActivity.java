@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.http.SslError;
@@ -15,18 +14,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
-import android.webkit.GeolocationPermissions;
+import android.webkit.JavascriptInterface;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.Toast;
-import android.webkit.GeolocationPermissions.Callback;
 
 import java.util.List;
-
-import ph.com.valtes.mobileapplication.R;
 
 public class RegistrationActivity extends AppCompatActivity {
 
@@ -42,9 +38,10 @@ public class RegistrationActivity extends AppCompatActivity {
     String emailAddress = "sample@valtes.com.ph";
 
     String messageBody = "";
-    static double longitude;
-    static double latitude;
+    static double longitude = 121.02627843618393;
+    static double latitude = 14.560617287615301;
     Location location = null;
+    static Button getSignature;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +55,8 @@ public class RegistrationActivity extends AppCompatActivity {
         webView.getSettings().setGeolocationEnabled(true);
         webView.getSettings().setAppCacheEnabled(true);
         webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+        ButtonClickJavascriptInterface myJavaScriptInterface = new ButtonClickJavascriptInterface(RegistrationActivity.this);
+        webView.addJavascriptInterface(myJavaScriptInterface, "hideGetSignatureButton");
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
@@ -72,7 +71,7 @@ public class RegistrationActivity extends AppCompatActivity {
         });
         webView.setWebChromeClient(new WebChromeClient());
 
-        Button getSignature = (Button) findViewById(R.id.signature);
+        getSignature = (Button) findViewById(R.id.signature);
         getSignature.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Intent intent = new Intent(RegistrationActivity.this, CaptureSignature.class);
@@ -85,28 +84,27 @@ public class RegistrationActivity extends AppCompatActivity {
                     MY_PERMISSIONS_REQUEST_RECEIVE_SMS);
         }
 
-//        LocationManager locationManager;
-//        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-//        if (locationManager != null) {
-//            System.out.println("locationManager is not null");
-//            if (Build.VERSION.SDK_INT > 22 &&
-//                    ContextCompat.checkSelfPermission(RegistrationActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//                ActivityCompat.requestPermissions(RegistrationActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 2);
-//            }
-//            List<String> providers = locationManager.getProviders(true);
-//            for (String provider : providers) {
-//                Location l = locationManager.getLastKnownLocation(provider);
-//                if (l == null) {
-//                    continue;
-//                }
-//                if (location == null || l.getAccuracy() < location.getAccuracy()) {
-//                    // Found best last known location: %s", l);
-//                    location = l;
-//                }
-//            }
-//        }
-//        latitude = location.getLatitude();
-//        longitude = location.getLongitude();
+        LocationManager locationManager;
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        if (locationManager != null) {
+            if (Build.VERSION.SDK_INT > 22 &&
+                    ContextCompat.checkSelfPermission(RegistrationActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(RegistrationActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 2);
+            }
+            List<String> providers = locationManager.getProviders(true);
+            for (String provider : providers) {
+                Location l = locationManager.getLastKnownLocation(provider);
+                if (l == null) {
+                    continue;
+                }
+                if (location == null || l.getAccuracy() < location.getAccuracy()) {
+                    // Found best last known location: %s", l);
+                    location = l;
+                }
+            }
+        }
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
 
         webView.loadUrl("https://192.168.100.41:8443/WebApplicationService/");
     }
@@ -167,8 +165,22 @@ public class RegistrationActivity extends AppCompatActivity {
 
     public void injectSignatureString(String pEncodedSignature) {
 
-        System.out.println("longitude: " + longitude + "; latitude: " + latitude);
         webView.loadUrl("javascript: " +
-                "b64toBlob('" + pEncodedSignature + "', '" + 100.00 + "', '" + 100.00 + "');");
+                "b64toBlob('" + pEncodedSignature + "', '" + longitude + "', '" + latitude + "');");
+    }
+
+    public class ButtonClickJavascriptInterface {
+        Context mContext;
+        ButtonClickJavascriptInterface(Context c) {
+            mContext = c;
+        }
+
+        @JavascriptInterface
+        public void onButtonClick(boolean toast) {
+            getSignature.setVisibility(View.VISIBLE);
+            if (toast){
+                getSignature.setVisibility(View.GONE);
+            }
+        }
     }
 }

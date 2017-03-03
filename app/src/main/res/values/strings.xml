@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Mobile Banking App</string>
-    <string name="external_dir">GetSignature</string>
+    <string name="getSignature">Get Signature</string>
+    <string name="cancel">Cancel</string>
+    <string name="clear">Clear</string>
+    <string name="save">Save</string>
+    <string name="sign">Please Sign below...</string>
 </resources>
 
     <!--<resources>-->

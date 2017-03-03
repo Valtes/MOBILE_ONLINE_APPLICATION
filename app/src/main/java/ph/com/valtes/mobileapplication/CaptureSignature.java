@@ -1,8 +1,10 @@
 package ph.com.valtes.mobileapplication;
 
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Calendar;
 
@@ -24,16 +26,16 @@ import android.provider.MediaStore.Images;
 import android.util.AttributeSet;
 import android.util.Base64;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import ph.com.valtes.mobileapplication.R;
 
 public class CaptureSignature extends Activity {
 
@@ -41,7 +43,6 @@ public class CaptureSignature extends Activity {
     signature mSignature;
     Button mClear, mGetSign, mCancel;
     public static String tempDir;
-    public int count = 1;
     public String current = null;
     private Bitmap mBitmap;
     View mView;
@@ -59,9 +60,9 @@ public class CaptureSignature extends Activity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.signature);
 
-        tempDir = Environment.getExternalStorageDirectory() + "/" + getResources().getString(R.string.external_dir) + "/";
+        tempDir = Environment.getExternalStorageDirectory() + "/" + getResources().getString(R.string.getSignature) + "/";
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
-        File directory = cw.getDir(getResources().getString(R.string.external_dir), Context.MODE_PRIVATE);
+        File directory = cw.getDir(getResources().getString(R.string.getSignature), Context.MODE_PRIVATE);
 
         prepareDirectory();
         uniqueId = getTodaysDate() + "_" + getCurrentTime() + "_" + Math.random();
@@ -83,9 +84,9 @@ public class CaptureSignature extends Activity {
         {
             public void onClick(View v)
             {
-                Log.v("log_tag", "Panel Cleared");
-                mSignature.clear();
-                mGetSign.setEnabled(false);
+            Log.v("log_tag", "Panel Cleared");
+            mSignature.clear();
+            mGetSign.setEnabled(false);
             }
         });
 
@@ -93,18 +94,15 @@ public class CaptureSignature extends Activity {
         {
             public void onClick(View v)
             {
-                Log.v("log_tag", "Panel Saved");
-                boolean error = captureSignature();
-                if(!error){
-                    mView.setDrawingCacheEnabled(true);
-                    mSignature.save(mView);
-                    Bundle b = new Bundle();
-                    b.putString("status", "done");
-                    Intent intent = new Intent();
-                    intent.putExtras(b);
-                    setResult(RESULT_OK,intent);
-                    finish();
-                }
+            Log.v("log_tag", "Panel Saved");
+            mView.setDrawingCacheEnabled(true);
+            mSignature.save(mView);
+            Bundle b = new Bundle();
+            b.putString("status", "done");
+            Intent intent = new Intent();
+            intent.putExtras(b);
+            setResult(RESULT_OK,intent);
+            finish();
             }
         });
 
@@ -112,13 +110,13 @@ public class CaptureSignature extends Activity {
         {
             public void onClick(View v)
             {
-                Log.v("log_tag", "Panel Canceled");
-                Bundle b = new Bundle();
-                b.putString("status", "cancel");
-                Intent intent = new Intent();
-                intent.putExtras(b);
-                setResult(RESULT_OK,intent);
-                finish();
+            Log.v("log_tag", "Panel Canceled");
+            Bundle b = new Bundle();
+            b.putString("status", "cancel");
+            Intent intent = new Intent();
+            intent.putExtras(b);
+            setResult(RESULT_OK,intent);
+            finish();
             }
         });
 
@@ -128,14 +126,6 @@ public class CaptureSignature extends Activity {
     protected void onDestroy() {
         Log.w("GetSignature", "onDestroy");
         super.onDestroy();
-    }
-
-    private boolean captureSignature() {
-
-        boolean error = false;
-        String errorMessage = "";
-
-        return error;
     }
 
     private String getTodaysDate() {
@@ -157,7 +147,6 @@ public class CaptureSignature extends Activity {
                 (c.get(Calendar.SECOND));
         Log.w("TIME:",String.valueOf(currentTime));
         return(String.valueOf(currentTime));
-
     }
 
 
@@ -182,8 +171,9 @@ public class CaptureSignature extends Activity {
     private boolean makedirs()
     {
         File tempdir = new File(tempDir);
-        if (!tempdir.exists())
+        if (!tempdir.exists()) {
             tempdir.mkdirs();
+        }
 
         if (tempdir.isDirectory())
         {
@@ -249,6 +239,7 @@ public class CaptureSignature extends Activity {
 
                 String signatureUrl = Images.Media.insertImage(getContentResolver(), mBitmap, current, null);
                 Log.v("log_tag","url: " + signatureUrl);
+
                 //In case you want to delete the file
                 //boolean deleted = mypath.delete();
                 //Log.v("log_tag","deleted: " + mypath.toString() + deleted);
@@ -260,7 +251,7 @@ public class CaptureSignature extends Activity {
             {
                 Log.v("log_tag", e.toString());
             }
-
+            appendLog("test");
             return;
         }
 
@@ -366,5 +357,35 @@ public class CaptureSignature extends Activity {
         encodedSignature = Base64.encodeToString(byteArray, Base64.DEFAULT);
         registrationActivity.injectSignatureString(encodedSignature);
         return encodedSignature;
+    }
+
+    public void appendLog(String text)
+    {
+        File logFile = new File("sdcard/log.file");
+        if (!logFile.exists())
+        {
+            try
+            {
+                logFile.createNewFile();
+            }
+            catch (IOException e)
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        try
+        {
+            //BufferedWriter for performance, true to set append to file flag
+            BufferedWriter buf = new BufferedWriter(new FileWriter(logFile, true));
+            buf.append(text);
+            buf.newLine();
+            buf.close();
+        }
+        catch (IOException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 }

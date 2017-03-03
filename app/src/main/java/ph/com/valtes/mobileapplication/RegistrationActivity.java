@@ -24,6 +24,8 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import ph.com.valtes.mobileapplication.R;
+
 public class RegistrationActivity extends AppCompatActivity {
 
     public static final int SIGNATURE_ACTIVITY = 1;

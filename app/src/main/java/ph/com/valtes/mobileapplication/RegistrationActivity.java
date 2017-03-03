@@ -24,8 +24,6 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import ph.com.valtes.mobileapplication.R;
-
 public class RegistrationActivity extends AppCompatActivity {
 
     public static final int SIGNATURE_ACTIVITY = 1;
@@ -178,11 +176,16 @@ public class RegistrationActivity extends AppCompatActivity {
         }
 
         @JavascriptInterface
-        public void onButtonClick(boolean toast) {
-            getSignature.setVisibility(View.VISIBLE);
-            if (toast){
-                getSignature.setVisibility(View.GONE);
-            }
+        public void onButtonClick(final boolean toast) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    getSignature.setVisibility(View.VISIBLE);
+                    if (toast){
+                        getSignature.setVisibility(View.GONE);
+                    }
+                }
+            });
         }
     }
 }

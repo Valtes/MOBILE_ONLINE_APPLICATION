@@ -30,12 +30,17 @@ public class RegistrationActivity extends AppCompatActivity {
     public static final int MY_PERMISSIONS_REQUEST_RECEIVE_SMS = 1;
 
     static WebView webView;
-    String bankNumber = "0123456789";
-    String firstName = "Pepito";
-    String lastName = "Manaloto";
-    String middleName = "Middle";
-    String contacNumber = "09161234567";
-    String emailAddress = "sample@valtes.com.ph";
+    String bankNumber = "";
+    String firstName = "";
+    String lastName = "";
+    String middleName = "";
+    String contacNumber = "";
+    String emailAddress = "";
+    String address = "";
+    String father_name = "";
+    String mother_name = "";
+    String gender = "";
+    String educational_attainment = "";
 
     String messageBody = "";
     static double longitude = 121.02627843618393;
@@ -129,14 +134,6 @@ public class RegistrationActivity extends AppCompatActivity {
     private void injectJS(WebView view) {
         try {
             view.loadUrl("javascript: " +
-                    "var bankNumber = document.getElementById('card_number').value = '" + bankNumber + "';" +
-                    "var lastName = document.getElementById('last_name').value = '" + lastName + "'; " +
-                    "var firstName = document.getElementById('first_name').value = '" + firstName + "'; " +
-                    "var middleName = document.getElementById('middle_name').value = '" + middleName + "'; " +
-                    "var contactNumber = document.getElementById('contact_number').value = '" + contacNumber + "'; " +
-                    "var contactNumber = document.getElementById('email_address').value = '" + emailAddress + "';");
-
-            view.loadUrl("javascript: " +
                     "configureMobile('1');");
         } catch (Exception e) {
             e.printStackTrace();
@@ -153,6 +150,11 @@ public class RegistrationActivity extends AppCompatActivity {
         middleName = data[3];
         contacNumber = data[4];
         emailAddress = data[5];
+        address = data[6];
+        father_name = data[7];
+        mother_name = data[8];
+        gender = data[9];
+        educational_attainment = data[10];
 
         webView.loadUrl("javascript: " +
                 "var bankNumber = document.getElementById('card_number').value = '" + bankNumber + "';" +
@@ -160,7 +162,12 @@ public class RegistrationActivity extends AppCompatActivity {
                 "var firstName = document.getElementById('first_name').value = '" + firstName + "'; " +
                 "var middleName = document.getElementById('middle_name').value = '" + middleName + "'; " +
                 "var contactNumber = document.getElementById('contact_number').value = '" + contacNumber + "'; " +
-                "var contactNumber = document.getElementById('email_address').value = '" + emailAddress + "';");
+                "var contactNumber = document.getElementById('email_address').value = '" + emailAddress + "'; " +
+                "var contactNumber = document.getElementById('address').value = '" + address + "'; " +
+                "var contactNumber = document.getElementById('father_name').value = '" + father_name + "'; " +
+                "var contactNumber = document.getElementById('mother_name').value = '" + mother_name + "';" +
+                "var contactNumber = document.getElementById('gender').value = " + gender + ";" +
+                "var contactNumber = document.getElementById('degree').value = " + educational_attainment + ";");
     }
 
     public void injectSignatureString(String pEncodedSignature) {

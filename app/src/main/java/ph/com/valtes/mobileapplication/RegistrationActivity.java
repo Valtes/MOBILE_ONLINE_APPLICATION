@@ -40,7 +40,6 @@ public class RegistrationActivity extends AppCompatActivity {
     String father_name = "";
     String mother_name = "";
     String gender = "";
-    String educational_attainment = "";
 
     String messageBody = "";
     static double longitude = 121.02627843618393;
@@ -154,7 +153,6 @@ public class RegistrationActivity extends AppCompatActivity {
         father_name = data[7];
         mother_name = data[8];
         gender = data[9];
-        educational_attainment = data[10];
 
         webView.loadUrl("javascript: " +
                 "var bankNumber = document.getElementById('card_number').value = '" + bankNumber + "';" +
@@ -166,8 +164,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 "var contactNumber = document.getElementById('address').value = '" + address + "'; " +
                 "var contactNumber = document.getElementById('father_name').value = '" + father_name + "'; " +
                 "var contactNumber = document.getElementById('mother_name').value = '" + mother_name + "';" +
-                "var contactNumber = document.getElementById('gender').value = " + gender + ";" +
-                "var contactNumber = document.getElementById('degree').value = " + educational_attainment + ";");
+                "var contactNumber = document.getElementById('gender').value = " + gender + ";");
     }
 
     public void injectSignatureString(String pEncodedSignature) {
